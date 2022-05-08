@@ -24,7 +24,10 @@
       (cond
         [(empty? table) empty]
         [(or (= count 0) (= count 1)) (fprintf (csv-output-port) "~a," (second (car acc))) (loop (add1 count) (rest acc))]
-        [(= count 2) (fprintf (csv-output-port) "~a\n" (third (car acc))) (loop 0 (rest acc))]
+        [(= count 2) 
+        (fprintf (csv-output-port) "~a\n"
+          (string-replace (third (car acc)) "," ""))
+        (loop 0 (rest acc))]
         )
         ))
 
