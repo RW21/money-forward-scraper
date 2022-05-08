@@ -1,14 +1,23 @@
+#! /usr/bin/env racket
 #lang racket
 
 (require html-parsing sxml threading)
 
-(define parsed-html 
-    (~>> "/home/rw21/Downloads/money.html"
+(define file-location
+  (command-line
+    #:usage-help 
+    "Usage: parse.rkt <file>"
+
+    #:args (file-location)
+    file-location
+))
+
+(define  table
+    (~>> file-location
         file->string
         html->xexp
+        ((sxpath "//*[contains(@id,'js-transaction-')]/td[position() = 2 or position() = 3 or position() = 4]/div/span"))
     ))
-
-(define table ((sxpath "//*[contains(@id,'js-transaction-')]/td[position() = 2 or position() = 3 or position() = 4]/div/span") parsed-html))
 
 (define (table->csv table csv-output-port)
     (let loop ([count 0] [acc table])
